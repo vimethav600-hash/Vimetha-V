@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    /* Filter buttons */
+    .filters {
+      margin-bottom: 20px;
+    }
+
+    .filters button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    .filters button:hover {
+      background: #555;
+    }
+
+    /* Gallery grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      filter: brightness(80%);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .close, .prev, .next {
+      position: absolute;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      padding: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+    }
+
+    .close {
+      top: 20px;
+      right: 30px;
+      transform: none;
+      font-size: 35px;
+    }
+
+    .prev { left: 30px; }
+    .next { right: 30px; }
+
+  </style>
+</head>
+<body>
+
+  <h1>Image Gallery</h1>
+
+  <!-- Filters -->
+  <div class="filters">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('animals')">Animals</button>
+    <button onclick="filterImages('travel')">Travel</button>
+  </div>
+
+  <!-- Gallery -->
+  <div class="gallery">
+  <img src="https://picsum.photos/400/300?random=1" class="nature" alt="">
+  <img src="https://picsum.photos/400/300?random=2" class="animals" alt="">
+  <img src="https://picsum.photos/400/300?random=3" class="travel" alt="">
+  <img src="https://picsum.photos/400/300?random=4" class="nature" alt="">
+  <img src="https://picsum.photos/400/300?random=5" class="animals" alt="">
+  <img src="https://picsum.photos/400/300?random=6" class="travel" alt="">
+  <img src="https://picsum.photos/400/300?random=7" class="nature" alt="">
+  <img src="https://picsum.photos/400/300?random=8" class="animals" alt="">
+  <img src="https://picsum.photos/400/300?random=9" class="travel" alt="">
+  <img src="https://picsum.photos/400/300?random=10" class="nature" alt="">
+  <img src="https://picsum.photos/400/300?random=11" class="animals" alt="">
+  <img src="https://picsum.photos/400/300?random=12" class="travel" alt="">
+  <img src="https://picsum.photos/400/300?random=13" class="nature" alt="">
+  <img src="https://picsum.photos/400/300?random=14" class="animals" alt="">
+  <img src="https://picsum.photos/400/300?random=15" class="travel" alt="">
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <span class="prev" onclick="changeImage(-1)">&#10094;</span>
+    <img id="lightbox-img" src="">
+    <span class="next" onclick="changeImage(1)">&#10095;</span>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll(".gallery img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    let currentIndex = 0;
+
+    // Open lightbox
+    images.forEach((img, index) => {
+      img.addEventListener("click", () => {
+        lightbox.style.display = "flex";
+        lightboxImg.src = img.src;
+        currentIndex = index;
+      });
+    });
+
+    // Close lightbox
+    function closeLightbox() {
+      lightbox.style.display = "none";
+    }
+
+    // Next/Prev
+    function changeImage(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = images.length - 1;
+      if (currentIndex >= images.length) currentIndex = 0;
+      lightboxImg.src = images[currentIndex].src;
+    }
+
+    // Filters
+    function filterImages(category) {
+      images.forEach(img => {
+        if (category === "all" || img.classList.contains(category)) {
+          img.style.display = "block";
+        } else {
+          img.style.display = "none";
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
